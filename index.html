@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#08090d">
+    <meta name="description" content="CineVerse - Discover trending movies, latest releases and popular films.">
+
+    <title>CineVerse - Movie Website</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* ========================================
+           RESET
+        ======================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", Arial, sans-serif;
+            background: #08090d;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .container {
+            width: min(1200px, 92%);
+            margin: auto;
+        }
+
+
+        /* ========================================
+           HEADER
+        ======================================== */
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 72px;
+            z-index: 1000;
+
+            background: rgba(7, 8, 12, .82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+
+        .nav {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: #e50914;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+        .nav-menu a {
+            color: #a8a8af;
+            font-size: 14px;
+            font-weight: 600;
+            transition: .3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #fff;
+        }
+
+        .nav-menu a.active::after {
+            content: "";
+            display: block;
+            width: 5px;
+            height: 5px;
+            margin: 5px auto 0;
+            background: #e50914;
+            border-radius: 50%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-button {
+            width: 42px;
+            height: 42px;
+            border: 0;
+            border-radius: 50%;
+            background: #17181e;
+            color: white;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .menu-button {
+            display: none;
+        }
+
+
+        /* ========================================
+           SEARCH
+        ======================================== */
+
+        .search-panel {
+            position: fixed;
+            top: 72px;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+
+            padding: 18px 0;
+
+            background: rgba(8,9,13,.98);
+
+            transform: translateY(-150%);
+            transition: .35s;
+        }
+
+        .search-panel.show {
+            transform: translateY(0);
+        }
+
+        .search-input {
+            width: 100%;
+            height: 52px;
+
+            padding: 0 18px;
+
+            border: 1px solid #292b33;
+            border-radius: 12px;
+
+            outline: none;
+
+            background: #15161c;
+            color: white;
+
+            font-size: 15px;
+        }
+
+        .search-input::placeholder {
+            color: #777;
+        }
+
+
+        /* ========================================
+           HERO
+        ======================================== */
+
+        .hero {
+            min-height: 720px;
+            position: relative;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #08090d 0%,
+                    rgba(8,9,13,.90) 30%,
+                    rgba(8,9,13,.35) 65%,
+                    rgba(8,9,13,.80) 100%
+                ),
+                url("https://image.tmdb.org/t/p/original/5P8SmMzSNYikXpxil6BYzJ16611.jpg")
+                center/cover no-repeat;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    0deg,
+                    #08090d 0%,
+                    transparent 35%,
+                    transparent 75%,
+                    #08090d 100%
+                );
+        }
+
+        .hero-content {
+            min-height: 720px;
+
+            display: flex;
+            align-items: center;
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-info {
+            max-width: 560px;
+            padding-top: 70px;
+        }
+
+        .badge {
+            display: inline-block;
+
+            padding: 8px 13px;
+
+            margin-bottom: 18px;
+
+            border-radius: 30px;
+
+            background: rgba(229,9,20,.15);
+            border: 1px solid rgba(229,9,20,.35);
+
+            color: #ff626a;
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .hero h1 {
+            font-size: clamp(55px, 8vw, 105px);
+            line-height: .86;
+
+            letter-spacing: -5px;
+
+            font-weight: 800;
+        }
+
+        .hero h1 span {
+            color: #e50914;
+        }
+
+        .movie-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 17px;
+
+            margin: 25px 0 18px;
+
+            color: #c3c3c9;
+            font-size: 13px;
+        }
+
+        .movie-meta span:first-child {
+            color: #ffd43b;
+            font-weight: 700;
+        }
+
+        .hero-description {
+            color: #b8b8bf;
+
+            font-size: 14px;
+            line-height: 1.7;
+
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+
+            margin-top: 28px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 13px 20px;
+
+            border-radius: 9px;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition: .3s;
+        }
+
+        .btn-primary {
+            background: #e50914;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff1b27;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,.10);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,.18);
+        }
+
+
+        /* ========================================
+           SECTIONS
+        ======================================== */
+
+        .section {
+            padding: 70px 0;
+        }
+
+        .section.dark {
+            background: #0c0d12;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+
+            margin-bottom: 30px;
+        }
+
+        .section-label {
+            color: #e50914;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            text-transform: uppercase;
+            letter-spacing: 2px;
+
+            margin-bottom: 7px;
+        }
+
+        .section-title {
+            font-size: 29px;
+            letter-spacing: -1px;
+        }
+
+        .view-all {
+            color: #96979e;
+            font-size: 13px;
+        }
+
+        .view-all:hover {
+            color: #fff;
+        }
+
+
+        /* ========================================
+           MOVIE GRID
+        ======================================== */
+
+        .movie-grid {
+            display: grid;
+
+            grid-template-columns: repeat(5, 1fr);
+
+            gap: 18px;
+        }
+
+        .movie-card {
+            min-width: 0;
+        }
+
+        .poster {
+            height: 335px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            border-radius: 12px;
+
+            background: #15161c;
+        }
+
+        .poster img {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+
+            transition: transform .45s ease;
+        }
+
+        .poster::after {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    transparent 40%,
+                    rgba(0,0,0,.70) 100%
+                );
+
+            opacity: 0;
+
+            transition: .3s;
+        }
+
+        .movie-card:hover .poster img {
+            transform: scale(1.07);
+        }
+
+        .movie-card:hover .poster::after {
+            opacity: 1;
+        }
+
+        .quality {
+            position: absolute;
+
+            top: 10px;
+            left: 10px;
+
+            z-index: 5;
+
+            padding: 5px 7px;
+
+            border-radius: 5px;
+
+            background: #e50914;
+
+            color: #fff;
+
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .play-button {
+            position: absolute;
+
+            left: 50%;
+            top: 50%;
+
+            z-index: 6;
+
+            width: 48px;
+            height: 48px;
+
+            border: 0;
+            border-radius: 50%;
+
+            background: #e50914;
+            color: white;
+
+            cursor: pointer;
+
+            opacity: 0;
+
+            transform: translate(-50%, -40%);
+
+            transition: .3s;
+        }
+
+        .movie-card:hover .play-button {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+
+        .movie-info {
+            padding: 12px 2px;
+        }
+
+        .movie-title {
+            font-size: 14px;
+            font-weight: 700;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            margin-bottom: 7px;
+        }
+
+        .movie-details {
+            display: flex;
+            gap: 12px;
+
+            color: #777982;
+
+            font-size: 11px;
+        }
+
+        .movie-rating {
+            color: #ffc928;
+        }
+
+
+        /* ========================================
+           GENRES
+        ======================================== */
+
+        .genre-grid {
+            display: grid;
+
+            grid-template-columns: repeat(6, 1fr);
+
+            gap: 15px;
+        }
+
+        .genre {
+            height: 120px;
+
+            display: flex;
+            align-items: flex-end;
+
+            padding: 17px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            border-radius: 13px;
+
+            background-position: center;
+            background-size: cover;
+
+            font-size: 15px;
+            font-weight: 800;
+
+            transition: .3s;
+        }
+
+        .genre::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    0deg,
+                    rgba(0,0,0,.90),
+                    transparent
+                );
+        }
+
+        .genre span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .genre:hover {
+            transform: translateY(-5px);
+        }
+
+        .genre-action {
+            background-image:
+                url("https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80");
+        }
+
+        .genre-comedy {
+            background-image:
+                url("https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=600&q=80");
+        }
+
+        .genre-horror {
+            background-image:
+                url("https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=600&q=80");
+        }
+
+        .genre-thriller {
+            background-image:
+                url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80");
+        }
+
+        .genre-romance {
+            background-image:
+                url("https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80");
+        }
+
+        .genre-scifi {
+            background-image:
+                url("https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80");
+        }
+
+
+        /* ========================================
+           FOOTER
+        ======================================== */
+
+        .footer {
+            padding: 55px 0 20px;
+
+            background: #05060a;
+
+            border-top: 1px solid #15161d;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+
+            gap: 40px;
+        }
+
+        .footer-description {
+            max-width: 350px;
+
+            margin-top: 13px;
+
+            color: #777982;
+
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+
+            gap: 25px;
+        }
+
+        .footer-links a {
+            color: #85868e;
+            font-size: 12px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            width: min(1200px, 92%);
+
+            margin: 40px auto 0;
+            padding-top: 20px;
+
+            border-top: 1px solid #17181e;
+
+            color: #555760;
+
+            font-size: 11px;
+        }
+
+
+        /* ========================================
+           TABLET
+        ======================================== */
+
+        @media (max-width: 1050px) {
+
+            .movie-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .movie-card:nth-child(5) {
+                display: none;
+            }
+
+            .poster {
+                height: 300px;
+            }
+
+            .genre-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+
+        /* ========================================
+           MOBILE
+        ======================================== */
+
+        @media (max-width: 700px) {
+
+            .header {
+                height: 64px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .nav-menu {
+                position: absolute;
+
+                top: 64px;
+                left: 0;
+
+                width: 100%;
+
+                padding: 20px;
+
+                display: none;
+
+                flex-direction: column;
+                align-items: flex-start;
+
+                gap: 20px;
+
+                background: rgba(8,9,13,.98);
+
+                border-bottom: 1px solid #1b1c22;
+            }
+
+            .nav-menu.show {
+                display: flex;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-button {
+                width: 38px;
+                height: 38px;
+            }
+
+            .search-panel {
+                top: 64px;
+            }
+
+            .hero {
+                min-height: 650px;
+
+                background:
+                    linear-gradient(
+                        0deg,
+                        #08090d 0%,
+                        rgba(8,9,13,.45) 60%,
+                        rgba(8,9,13,.85) 100%
+                    ),
+                    url("https://image.tmdb.org/t/p/original/5P8SmMzSNYikXpxil6BYzJ16611.jpg")
+                    center/cover no-repeat;
+            }
+
+            .hero-content {
+                min-height: 650px;
+
+                align-items: flex-end;
+
+                padding-bottom: 50px;
+            }
+
+            .hero-info {
+                padding-top: 0;
+            }
+
+            .hero h1 {
+                font-size: clamp(48px, 16vw, 75px);
+                letter-spacing: -3px;
+            }
+
+            .hero-description {
+                font-size: 13px;
+            }
+
+            .movie-meta {
+                gap: 11px;
+                font-size: 11px;
+            }
+
+            .hero-buttons {
+                margin-top: 22px;
+            }
+
+            .btn {
+                padding: 12px 15px;
+                font-size: 11px;
+            }
+
+            .section {
+                padding: 50px 0;
+            }
+
+            .section-header {
+                margin-bottom: 20px;
+            }
+
+            .section-title {
+                font-size: 23px;
+            }
+
+            .view-all {
+                font-size: 11px;
+            }
+
+            .movie-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+
+            .movie-card:nth-child(5) {
+                display: block;
+            }
+
+            .poster {
+                height: 245px;
+                border-radius: 9px;
+            }
+
+            .movie-title {
+                font-size: 12px;
+            }
+
+            .movie-details {
+                font-size: 10px;
+            }
+
+            .genre-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .genre {
+                height: 100px;
+                font-size: 13px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+            }
+        }
+
+
+        /* ========================================
+           SMALL MOBILE
+        ======================================== */
+
+        @media (max-width: 380px) {
+
+            .container {
+                width: 94%;
+            }
+
+            .hero {
+                min-height: 610px;
+            }
+
+            .hero-content {
+                min-height: 610px;
+                padding-bottom: 40px;
+            }
+
+            .hero h1 {
+                font-size: 45px;
+            }
+
+            .hero-description {
+                font-size: 12px;
+            }
+
+            .poster {
+                height: 215px;
+            }
+
+            .movie-grid {
+                gap: 11px;
+            }
+
+            .genre {
+                height: 90px;
+            }
+        }
+
+
+        /* ========================================
+           LARGE DESKTOP
+        ======================================== */
+
+        @media (min-width: 1400px) {
+
+            .container {
+                width: 1240px;
+            }
+
+            .poster {
+                height: 365px;
+            }
+
+            .hero {
+                min-height: 780px;
+            }
+
+            .hero-content {
+                min-height: 780px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="#" class="logo">
+            Cine<span>Verse</span>
+        </a>
+
+        <nav class="nav-menu" id="navMenu">
+
+            <a href="#" class="active">Home</a>
+
+            <a href="#movies">Movies</a>
+
+            <a href="#genres">Genres</a>
+
+            <a href="#latest">Latest</a>
+
+        </nav>
+
+        <div class="nav-actions">
+
+            <button class="nav-button" id="searchButton">
+                🔍
+            </button>
+
+            <button class="nav-button menu-button" id="menuButton">
+                ☰
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ==========================================
+     SEARCH
+========================================== -->
+
+<div class="search-panel" id="searchPanel">
+
+    <div class="container">
+
+        <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Search movies..."
+        >
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     HERO
+========================================== -->
+
+<section class="hero">
+
+    <div class="container hero-content">
+
+        <div class="hero-info">
+
+            <span class="badge">
+                🔥 #1 Trending Movie
+            </span>
+
+            <h1>
+                THE<br>
+                <span>DARK KNIGHT</span>
+            </h1>
+
+            <div class="movie-meta">
+
+                <span>⭐ 9.0</span>
+
+                <span>2008</span>
+
+                <span>2h 32m</span>
+
+                <span>Action</span>
+
+            </div>
+
+            <p class="hero-description">
+                When a mysterious criminal mastermind threatens Gotham,
+                Batman must face his greatest challenge yet.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#movies" class="btn btn-primary">
+                    ▶ Watch Now
+                </a>
+
+                <a href="#" class="btn btn-secondary">
+                    ＋ Add to List
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+     TRENDING MOVIES
+========================================== -->
+
+<section class="section" id="movies">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-label">
+                    What's Popular
+                </div>
+
+                <h2 class="section-title">
+                    Trending Movies
+                </h2>
+
+            </div>
+
+            <a href="#" class="view-all">
+                View All →
+            </a>
+
+        </div>
+
+
+        <div class="movie-grid">
+
+
+            <!-- Movie 1 -->
+
+            <article class="movie-card">
+
+                <div class="poster">
+
+                    <img
+                        src="https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"
+                        alt="Deadpool and Wolverine"
+                        loading="lazy"
+                    >
+
+                    <span class="quality">
+                        HD
+                    </span>
+
+                    <button class="play-button">
+                        ▶
+                    </button>
+
+                </div>
+
+                <div class="movie-info">
+
+                    <h3 class="movie-title">
+                        Deadpool & Wolverine
+                    </h3>
+
+                    <div class="movie-details">
+
+                        <span class="movie-rating">
+                            ⭐ 8.0
+                        </span>
+
+                        <span>
+                            2024
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- Movie 2 -->
+
+            <article class="movie-card">
+
+                <div class="poster">
+
+                    <img
+                        src="https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg"
+                        alt="Inside Out 2"
+                        loading="lazy"
+                    >
+
+                    <span class="quality">
+                        4K
+                    </span>
+
+                    <button class="play-button">
+                        ▶
+                    </button>
+
+                </div>
+
+                <div class="movie-info">
+
+                    <h3 class="movie-title">
+                        Inside Out 2
+                    </h3>
+
+                    <div class="movie-details">
+
+                        <span class="movie-rating">
+                            ⭐ 7.6
+                        </span>
+
+                        <span>
+                            2024
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- Movie 3 -->
+
+            <article class="movie-card">
+
+                <div class="poster">
+
+                    <img
+                        src="https://image.tmdb.org/t/p/w500/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg"
+                        alt="The Avengers"
+                        loading="lazy"
+                    >
+
+                    <span class="quality">
+                        HD
+                    </span>
+
+                    <button class="play-button">
+                        ▶
+                    </button>
+
+                </div>
+
+                <div class="movie-info">
+
+                    <h3 class="movie-title">
+                        The Avengers
+                    </h3>
+
+                    <div class="movie-details">
+
+                        <span class="movie-rating">
+                            ⭐ 8.0
+                        </span>
+
+                        <span>
+                            2012
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- Movie 4 -->
+
+            <article class="movie-card">
+
+                <div class="poster">
+
+                    <img
+                        src="https://image.tmdb.org/t/p/w500/5qHoazZiaLe7oFBok7Xl0e0Qk5J.jpg"
+                        alt="The Batman"
+                        loading="lazy"
+                    >
+
+                    <span class="quality">
+                        4K
+                    </span>
+
+                    <button class="play-button">
+                        ▶
+                    </button>
+
+                </div>
+
+                <div class="movie-info">
+
+                    <h3 class="movie-title">
+                        The Batman
+                    </h3>
+
+                    <div class="movie-details">
+
+                        <span class="movie-rating">
+                            ⭐ 7.8
+                        </span>
+
+                        <span>
+                            2022
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- Movie 5 -->
+
+            <article class="movie-card">
+
+                <div class="poster">
+
+                    <img
+                        src="https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg"
+                        alt="Avatar"
+                        loading="lazy"
+                    >
+
+                    <span class="quality">
+                        4K
+                    </span>
+
+                    <button class="play-button">
+                        ▶
+                    </button>
+
+                </div>
+
+                <div class="movie-info">
+
+                    <h3 class="movie-title">
+                        Avatar
+                    </h3>
+
+                    <div class="movie-details">
+
+                        <span class="movie-rating">
+                            ⭐ 7.6
+                        </span>
+
+                        <span>
+                            2009
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+     GENRES
+========================================== -->
+
+<section class="section dark" id="genres">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-label">
+                    Explore
+                </div>
+
+                <h2 class="section-title">
+                    Browse by Genre
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="genre-grid">
+
+            <a href="#" class="genre genre-action">
+                <span>Action</span>
+            </a>
+
+            <a href="#" class="genre genre-comedy">
+                <span>Comedy</span>
+            </a>
+
+            <a href="#" class="genre genre-horror">
+                <span>Horror</span>
+            </a>
+
+            <a href="#" class="genre genre-thriller">
+                <span>Thriller</span>
+            </a>
+
+            <a href="#" class="genre genre-romance">
+                <span>Romance</span>
+            </a>
+
+            <a href="#" class="genre genre-scifi">
+                <span>Sci-Fi</span>
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+     LATEST MOVIES
+========================================== -->
+
+<section class="section" id="latest">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-label">
+                    Fresh Releases
+                </div>
+
+                <h2 class="section-title">
+                    Latest Movies
+                </h2>
+
+            </div>
+
+            <a href="#" class="view-all">
+                View All →
+            </a>
+
+        </div>
+
+
+        <div class="movie-grid">
+
+
+            <article class="movie-card">
+
+                <div class="poster">
+
+                    <img
+                        src="https://image.tmdb.org/t/p/w500/1XDDXPXGiI8id7MrUxK36ke7gkX.jpg"
+                        alt="Kung Fu Panda 4"
+                        loading="lazy"
+                    >
+
+                    <span class="quality">
+                        HD
+                    </span>
+
+                    <button class="play-button">
+                        ▶
+                    </button>
+
+                </div>
+
+                <div class="movie-info">
+
+                    <h3 class="movie-title">
+                        Kung Fu Panda 4
+                    </h3>
+
+                    <div class="movie-details">
+
+                        <span class="movie-rating">
+                            ⭐ 6.9
+                        </span>
+
+                        <span>
+                            2024
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="movie-card">
+
+                <div class="poster">
+
+                    <img
+                        src="https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg"
+                        alt="Dune Part Two"
+                        loading="lazy"
+                    >
+
+                    <span class="quality">
+                        4K
+                    </span>
+
+                    <button class="play-button">
+                        ▶
+                    </button>
+
+                </div>
+
+                <div class="movie-info">
+
+                    <h3 class="movie-title">
+                        Dune: Part Two
+                    </h3>
+
+                    <div class="movie-details">
+
+                        <span class="movie-rating">
+                            ⭐ 8.6
+                        </span>
+
+                        <span>
+                            2024
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="movie-card">
+
+                <div class="poster">
+
+                    <img
+                        src="https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"
+                        alt="Deadpool and Wolverine"
+                        loading="lazy"
+                    >
+
+                    <span class="quality">
+                        HD
+                    </span>
+
+                    <button class="play-button">
+                        ▶
+                    </button>
+
+                </div>
+
+                <div class="movie-info">
+
+                    <h3 class="movie-title">
+                        Deadpool & Wolverine
+                    </h3>
+
+                    <div class="movie-details">
+
+                        <span class="movie-rating">
+                            ⭐ 8.0
+                        </span>
+
+                        <span>
+                            2024
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="movie-card">
+
+                <div class="poster">
+
+                    <img
+                        src="https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"
+                        alt="Oppenheimer"
+                        loading="lazy"
+                    >
+
+                    <span class="quality">
+                        4K
+                    </span>
+
+                    <button class="play-button">
+                        ▶
+                    </button>
+
+                </div>
+
+                <div class="movie-info">
+
+                    <h3 class="movie-title">
+                        Oppenheimer
+                    </h3>
+
+                    <div class="movie-details">
+
+                        <span class="movie-rating">
+                            ⭐ 8.6
+                        </span>
+
+                        <span>
+                            2023
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div>
+
+            <a href="#" class="logo">
+                Cine<span>Verse</span>
+            </a>
+
+            <p class="footer-description">
+                Your destination for movies, entertainment
+                and cinematic experiences.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="#">
+                About
+            </a>
+
+            <a href="#">
+                Contact
+            </a>
+
+            <a href="#">
+                Privacy
+            </a>
+
+            <a href="#">
+                Terms
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 CineVerse. All rights reserved.
+
+    </div>
+
+</footer>
+
+
+<!-- ==========================================
+     JAVASCRIPT
+========================================== -->
+
+<script>
+
+    /* Mobile Menu */
+
+    const menuButton = document.getElementById("menuButton");
+    const navMenu = document.getElementById("navMenu");
+
+    menuButton.addEventListener("click", function () {
+
+        navMenu.classList.toggle("show");
+
+    });
+
+
+    /* Search */
+
+    const searchButton = document.getElementById("searchButton");
+    const searchPanel = document.getElementById("searchPanel");
+    const searchInput = document.getElementById("searchInput");
+
+    searchButton.addEventListener("click", function () {
+
+        searchPanel.classList.toggle("show");
+
+        if (searchPanel.classList.contains("show")) {
+
+            setTimeout(function () {
+                searchInput.focus();
+            }, 200);
+
+        }
+
+    });
+
+
+    /* Movie Search */
+
+    searchInput.addEventListener("input", function () {
+
+        const searchValue =
+            searchInput.value.toLowerCase().trim();
+
+        const movieCards =
+            document.querySelectorAll(".movie-card");
+
+        movieCards.forEach(function (card) {
+
+            const title =
+                card.querySelector(".movie-title")
+                    .textContent
+                    .toLowerCase();
+
+            if (title.includes(searchValue)) {
+
+                card.style.display = "";
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+
+    /* Close mobile menu after clicking link */
+
+    document.querySelectorAll(".nav-menu a").forEach(function (link) {
+
+        link.addEventListener("click", function () {
+
+            navMenu.classList.remove("show");
+
+        });
+
+    });
+
+
+    /* Play button demo */
+
+    document.querySelectorAll(".play-button").forEach(function (button) {
+
+        button.addEventListener("click", function (event) {
+
+            event.preventDefault();
+
+            alert("Movie player will open here.");
+
+        });
+
+    });
+
+</script>
+
+</body>
+</html>
